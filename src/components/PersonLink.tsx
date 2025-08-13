@@ -3,25 +3,18 @@ import { Link } from 'react-router-dom';
 import { Person } from '../types';
 
 type Props = {
-  name: string;
-  people: Person[];
+  person: Person;
 };
 
-export const PersonLink: React.FC<Props> = ({ name, people }) => {
-  const person = people.find(p => p.name === name);
-
-  if (!person) {
-    return <>{name}</>;
-  }
-
+export const PersonLink: React.FC<Props> = ({ person }) => {
   const isFemale = person.sex === 'f';
 
   return (
     <Link
       to={`/people/${person.slug}`}
-      className={`${isFemale ? 'has-text-danger' : ''}`}
+      className={isFemale ? 'has-text-danger' : ''}
     >
-      {name}
+      {person.name}
     </Link>
   );
 };

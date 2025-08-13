@@ -8,7 +8,6 @@ type Props = {
 };
 
 export const PeopleTable: React.FC<Props> = ({ people }) => {
-  const allNames = new Set(people?.map(p => p.name));
   const location = useLocation();
   const selectedSlug = location.pathname.split('/')[2];
 
@@ -31,6 +30,8 @@ export const PeopleTable: React.FC<Props> = ({ people }) => {
       <tbody>
         {people?.map(person => {
           const isSelected = selectedSlug === person.slug;
+          const mother = people.find(p => p.name === person.motherName);
+          const father = people.find(p => p.name === person.fatherName);
 
           return (
             <tr
@@ -39,7 +40,7 @@ export const PeopleTable: React.FC<Props> = ({ people }) => {
               className={`${isSelected ? 'has-background-warning' : ''}`}
             >
               <td>
-                <PersonLink name={person.name} people={people}></PersonLink>
+                <PersonLink person={person}></PersonLink>
               </td>
 
               <td>{person.sex}</td>
@@ -47,21 +48,23 @@ export const PeopleTable: React.FC<Props> = ({ people }) => {
               <td>{person.died}</td>
               <td>
                 {person.motherName ? (
-                  allNames.has(person.motherName) ? (
-                    <PersonLink name={person.motherName} people={people} />
+                  mother ? (
+                    <PersonLink person={mother} />
                   ) : (
-                    person.motherName
+                    <span className={'has-text-danger'}>
+                      {person.motherName}
+                    </span>
                   )
                 ) : (
                   '-'
                 )}
               </td>
               <td>
-                {person.fatherName ? (
-                  allNames.has(person.fatherName) ? (
-                    <PersonLink name={person.fatherName} people={people} />
+                {person.motherName ? (
+                  father ? (
+                    <PersonLink person={father} />
                   ) : (
-                    person.fatherName
+                    <span>{person.fatherName}</span>
                   )
                 ) : (
                   '-'
